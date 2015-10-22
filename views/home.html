@@ -1,0 +1,42 @@
+    <section class="hero [[ home.randomProduct.name ]]">
+      <div class="row">
+        <div class="small-12 columns">
+            <h1><a ui-sref="product({ productId: home.randomProduct.id, productName: home.randomProduct.name })">[[ home.randomProduct.name ]]</a> <em>by dre</em></h1>
+          </div>
+      </div>
+      <div class="row">
+        <div class="small-12 large-8 large-centered columns">
+          <form product-search novalidate ng-submit="search.submit()">
+              <div class="row collapse">
+                  <div class="small-12 medium-10 columns">
+                      <input type="text" name="term" ng-model="search.term" placeholder="Search by product name by dre" value=""/>
+                  </div>
+                  <div class="small-12 medium-2 columns">
+                      <input type="submit" value="Search" class="button radius postfix" />
+                  </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="body">
+      <div class="row">
+        <div class="small-12 columns">
+          <h2 class="tagline">Just when you've thought we ran out of ideas, we come right back.</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-12 medium-4 columns">
+          <h3>Review our <br />product line</h3>
+          <p>You like the way music sounds with headphones. You love the way it looks on your smartphone. Now, you're invited to the product innovation labs at ByDre Co.</p>
+        </div>
+        <div class="small-12 medium-4 columns">
+          <h3>Demonstrate your <br />marketing savvy</h3>
+          <p>We've created an entire line of products that compliment our artfully crafted product eco-system. We could use your marketing know-how to craft product descriptions.</p>
+        </div>
+        <div class="small-12 medium-4 columns">
+          <h3>Win the product <br />marketing game</h3>
+          <p>We know you have something to prove, so prove it here. This is the only product line that matters and your opinion is what we need to dominate the market.</p>
+        </div>
+      </div>
+    </section>

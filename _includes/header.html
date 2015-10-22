@@ -1,0 +1,27 @@
+    <nav class="top-bar" data-topbar>
+        <ul class="title-area">
+            <li class="name">
+                <h1><a ui-sref="home">ByDre.co</a></h1>
+            </li>
+            <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+        </ul>
+        <section class="top-bar-section">
+        <!-- Left Nav Section -->
+        <ul class="right">
+            <li class="has-form">
+                <form product-search novalidate ng-submit="search.submit()">
+                    <div class="row collapse">
+                        <div class="small-12 medium-8 columns">
+                            <input type="text" name="term" ng-model="search.term" placeholder="Search by product name by dre" value=""/>
+                        </div>
+                        <div class="small-12 medium-4 columns">
+                            <input type="submit" value="Search" class="button radius" />
+                        </div>
+                    </div>
+                </form>
+            </li>
+            <li class="divider"></li>
+            <li><random-product-button></random-product-button></li>
+        </ul>
+        </section>
+    </nav>

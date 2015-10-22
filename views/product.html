@@ -1,0 +1,39 @@
+    <div>
+    <section class="product [[ product.currentProduct.name ]]">
+        <div class="row">
+            <div class="small-12 medium-8 columns">
+                <h1><i>[[ product.currentProduct.name | substring ]]</i>[[ product.currentProduct.name ]] <em>by dre</em></h1>
+            </div>
+        </div>
+    </section>
+    <section class="body">
+        <div class="row">
+            <div class="small-12 columns">
+                <h2>Proposed product descriptions</h2>
+            </div>
+            <div class="small-12 large-3 large-push-9 columns aside">
+                <p>At ByDre.co we encourage your input to help artfully craft our product line. Feel free to submit and vote for as many as you like.</p>
+                <p>When a proposed product description reaches our target score, we will meet to evaluate its potential as being THE product description.</p>
+            </div>
+            <div class="small-12 large-9 large-pull-3 columns">
+                <div ng-if="product.descriptions.length" class="row description" ng-repeat="description in product.descriptions">
+                    <div class="small-4 medium-2 columns">
+                        <span class="vote up"><a ng-click="product.voteUpDescription(description)" class="up" title="Vote up"><div class="arrow-up"></div></a></span>
+                        <span class="score">[[ description.score | number:2 ]]</span>
+                        <span class="vote down"><a ng-click="product.voteDownDescription(description)" class="down" title="Vote down"><div class="arrow-down"></div></a></span>
+                    </div>
+                    <div class="small-8 medium-10 columns">
+                        <blockquote>[[ description.body ]]</blockquote>
+                    </div>
+                </div>
+                <div ng-if="!product.descriptions.length" class="panel no-data"><p>This product does not have any proposed descriptions yet. Submit your own now, you marketing wizard.</p></div>
+                <form name="descriptionForm" novalidate ng-submit="product.addDescription(descriptionForm)">
+                    <textarea ng-trim="false" name="body" ng-model="product.newDescription.body" placeholder="Description must be less than 300 characters" required ng-maxlength="300"></textarea>
+                    <p ng-show="descriptionForm.body.$viewValue.length <= 300">[[ 300 - descriptionForm.body.$viewValue.length ]] characters remaining.</p>
+                    <p ng-show="descriptionForm.body.$viewValue.length > 300">[[ descriptionForm.body.$viewValue.length - 300 ]] characters over.</p>
+                    <input type="submit" value="Add description proposal" class="button radius" ng-disabled="descriptionForm.$invalid" />
+                </form>
+            </div>
+        </div>
+    </section>
+    </div>

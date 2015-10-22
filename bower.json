@@ -1,0 +1,28 @@
+{
+  "name": "bydreco",
+  "version": "1.0.0",
+  "homepage": "https://github.com/stevenmaguire/bydre.co",
+  "authors": [
+    "Steven Maguire <stevenmaguire@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "foundation": "~5.5.3",
+    "angular": "~1.4.7",
+    "angular-ui-router": "~0.2.15",
+    "angular-messages": "~1.4.7"
+  }
+}
