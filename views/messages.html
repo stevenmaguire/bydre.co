@@ -1,0 +1,8 @@
+<div>
+    <div ng-if="messages.failure.length > 0" class="alert-box success server-side-message"> <!-- warning -->
+        <p ng-repeat="message in messages.failure">[[ message ]]</p>
+    </div>
+    <div ng-if="messages.success.length > 0" class="alert-box success server-side-message">
+        <p ng-repeat="message in messages.success">[[ message ]]</p>
+    </div>
+</div>

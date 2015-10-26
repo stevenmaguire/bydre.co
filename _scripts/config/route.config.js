@@ -28,16 +28,16 @@
                 }
             })
             .state('product', {
-                url: '/:productId/:productName',
+                url: '/:productName',
                 templateUrl: 'views/product.html',
                 controller: 'ProductCtrl',
                 controllerAs: 'product',
                 resolve: {
                     product: function ($stateParams, DataService) {
-                        return DataService.getProduct($stateParams.productId);
+                        return DataService.getProduct($stateParams.productName);
                     },
                     descriptions: function ($stateParams, DataService) {
-                        return DataService.getProductDescriptions($stateParams.productId);
+                        return DataService.getProductDescriptions($stateParams.productName);
                     }
                 }
             })

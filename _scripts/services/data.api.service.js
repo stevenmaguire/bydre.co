@@ -48,6 +48,13 @@
                     path: '/api/descriptions/'+descriptionId+'/'+(up ? 'vote-up' : 'vote-down')
                 });
             },
+            addProduct: function (productName) {
+                return privateMethods.fetchData({
+                    data: {name: productName},
+                    method: 'post',
+                    path: '/api/products'
+                });
+            },
             getProduct: function (productId) {
                 return privateMethods.fetchData({
                     method: 'get',
@@ -58,12 +65,6 @@
                 return privateMethods.fetchData({
                     method: 'get',
                     path: '/api/products/'+productId+'/descriptions'
-                });
-            },
-            getProductSearch: function (term) {
-                return privateMethods.fetchData({
-                    method: 'get',
-                    path: '/api/products/findOrCreate?name='+term
                 });
             },
             getRandomProduct: function () {

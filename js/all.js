@@ -1792,16 +1792,16 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
                 }
             })
             .state('product', {
-                url: '/:productId/:productName',
+                url: '/:productName',
                 templateUrl: 'views/product.html',
                 controller: 'ProductCtrl',
                 controllerAs: 'product',
                 resolve: {
                     product: function ($stateParams, DataService) {
-                        return DataService.getProduct($stateParams.productId);
+                        return DataService.getProduct($stateParams.productName);
                     },
                     descriptions: function ($stateParams, DataService) {
-                        return DataService.getProductDescriptions($stateParams.productId);
+                        return DataService.getProductDescriptions($stateParams.productName);
                     }
                 }
             })
@@ -1902,6 +1902,13 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
                     path: '/api/descriptions/'+descriptionId+'/'+(up ? 'vote-up' : 'vote-down')
                 });
             },
+            addProduct: function (productName) {
+                return privateMethods.fetchData({
+                    data: {name: productName},
+                    method: 'post',
+                    path: '/api/products'
+                });
+            },
             getProduct: function (productId) {
                 return privateMethods.fetchData({
                     method: 'get',
@@ -1912,12 +1919,6 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
                 return privateMethods.fetchData({
                     method: 'get',
                     path: '/api/products/'+productId+'/descriptions'
-                });
-            },
-            getProductSearch: function (term) {
-                return privateMethods.fetchData({
-                    method: 'get',
-                    path: '/api/products/findOrCreate?name='+term
                 });
             },
             getRandomProduct: function () {
@@ -1987,7 +1988,7 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
 (function (services) {
    'use strict';
 
-    services.service('DataService', ['$q', 'DataApiService', function ($q, api) {
+    services.service('DataService', ['$q', 'DataApiService', 'MessageService', function ($q, api, messages) {
         return {
             addDescriptionToProduct: function (description, productId) {
                 return api.addDescriptionToProduct(description, productId);
@@ -1995,14 +1996,20 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
             addDescriptionVote: function (descriptionId, up) {
                 return api.addDescriptionVote(descriptionId, up);
             },
+            addFailureMessage: function (message) {
+                return messages.addFailure(message);
+            },
+            addSuccessMessage: function (message) {
+                return messages.addSuccess(message);
+            },
+            addProduct: function (productName) {
+                return api.addProduct(productName);
+            },
             getProduct: function (productId) {
                 return api.getProduct(productId);
             },
             getProductDescriptions: function (productId) {
                 return api.getProductDescriptions(productId);
-            },
-            getProductSearch: function (term) {
-                return api.getProductSearch(term);
             },
             getRandomProduct: function () {
                 return api.getRandomProduct();
@@ -2012,25 +2019,60 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
 
 }(angular.module('bydreco.services')));
 
+(function (services) {
+   'use strict';
+
+    services.service('MessageService', ['$timeout', function ($timeout) {
+        var addMessage = function (message, collection) {
+            if (collection.indexOf(message) == -1) {
+                collection.push(message);
+                $timeout(function(){
+                    var index = collection.indexOf(message);
+                    if (index > -1) {
+                        collection.splice(index, 1);
+                    }
+                }, 5000);
+            }
+
+            return true;
+        }
+        return {
+            failure: [],
+            success: [],
+            addFailure: function (message) {
+                return addMessage(message, this.failure);
+            },
+            addSuccess: function (message) {
+                return addMessage(message, this.success);
+            },
+        };
+    }]);
+
+}(angular.module('bydreco.services')));
+
+(function (directives) {
+   'use strict';
+
+    directives.directive('messages', [function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {},
+            templateUrl: '/views/messages.html',
+            controller: 'MessagesCtrl',
+            controllerAs: 'messages',
+        };
+    }]);
+
+}(angular.module('bydreco.directives')));
+
 (function (directives) {
    'use strict';
 
     directives.directive('productSearch', [function () {
         return {
             restrict: 'A',
-            controller: ['$state', 'DataService', function ($state, data) {
-                var vm = this;
-                vm.term = null;
-                vm.submit = function () {
-                    if (vm.term) {
-                        data.getProductSearch(vm.term).then(function (product) {
-                            $state.go('product', {productId: product.id});
-                        }, function () {
-                            $state.go('product', {productId: 16});
-                        });
-                    }
-                };
-            }],
+            controller: 'ProductSearchCtrl',
             controllerAs: 'search',
         };
     }]);
@@ -2046,17 +2088,7 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
             replace: true,
             scope: {},
             templateUrl: '/views/random-product-button.html',
-            controller: ['$state', 'DataService', function ($state, data) {
-                var vm = this;
-
-                vm.go = function () {
-                    data.getRandomProduct().then(function (product) {
-                        $state.go('product', {productId: product.id, productName: product.name});
-                    }, function () {
-
-                    });
-                }
-            }],
+            controller: 'RandomProductCtrl',
             controllerAs: 'random',
         };
     }]);
@@ -2070,6 +2102,17 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
         var vm = this;
 
         vm.randomProduct = randomProduct;
+    }]);
+
+}(angular.module('bydreco.controllers')));
+
+(function (controllers) {
+   'use strict';
+
+    controllers.controller('MessagesCtrl', ['MessageService', function (messages) {
+        var vm = this;
+        vm.failure = messages.failure;
+        vm.success = messages.success;
     }]);
 
 }(angular.module('bydreco.controllers')));
@@ -2136,6 +2179,52 @@ m("AE")).directive("ngMessageExp",m("A"))})(window,window.angular);
         };
 
         sortDescriptions();
+    }]);
+
+}(angular.module('bydreco.controllers')));
+
+(function (controllers) {
+   'use strict';
+
+    controllers.controller('ProductSearchCtrl', ['$state', 'DataService', function ($state, data) {
+        var vm = this;
+        vm.term = null;
+        vm.submit = function () {
+            if (vm.term) {
+                data.getProduct(vm.term).then(function (product) {
+                    redirectToProduct(product.name);
+                }, function (error) {
+                    data.addProduct(vm.term).then(function (product) {
+                        data.addSuccessMessage('Thank you for your contribution of "'+product.name+'" to our product eco-system!');
+                        redirectToProduct(product.name);
+                    }, function (error) {
+                        data.addFailureMessage(error.name[0]);
+                        redirectToProduct('defeats');
+                    });
+                });
+            }
+        };
+
+        var redirectToProduct = function (productName) {
+            $state.go('product', {productName: productName});
+        };
+    }]);
+
+}(angular.module('bydreco.controllers')));
+
+(function (controllers) {
+   'use strict';
+
+    controllers.controller('RandomProductCtrl', ['$state', 'DataService', function ($state, data) {
+        var vm = this;
+
+        vm.go = function () {
+            data.getRandomProduct().then(function (product) {
+                $state.go('product', {productName: product.name});
+            }, function () {
+
+            });
+        }
     }]);
 
 }(angular.module('bydreco.controllers')));
