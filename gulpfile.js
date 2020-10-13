@@ -1,11 +1,9 @@
-// Include gulp
-var gulp = require('gulp');
-var concat = require('gulp-concat');
-var connect = require('gulp-connect');
+const { series, src, dest } = require('gulp');
+const concat = require('gulp-concat');
+const connect = require('gulp-connect');
 
-// Concatenate & Minify JS
-gulp.task('scripts', [], function() {
-    return gulp.src([
+exports.default = function() {
+    return src([
             'bower_components/modernizr/modernizr.js',
             'bower_components/jquery/dist/jquery.min.js',
             'bower_components/foundation/js/foundation.min.js',
@@ -21,21 +19,5 @@ gulp.task('scripts', [], function() {
             '_scripts/constants/*.js',
         ])
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('js'));
-});
-
-gulp.task('webserver', function() {
-  connect.server({
-    root: __dirname,
-    //livereload: true,
-    port: 8080,
-    fallback: 'index.html'
-  });
-});
-
-gulp.task('watch', function() {
-    gulp.watch('_scripts/**/*.js', ['scripts']);
-})
-
-// Default Task
-gulp.task('default', ['scripts', /*'webserver',*/ 'watch']);
+        .pipe(dest('js'));
+}
