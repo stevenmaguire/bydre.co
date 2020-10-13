@@ -23,6 +23,7 @@
     "foundation": "~5.5.3",
     "angular": "~1.4.7",
     "angular-ui-router": "~0.2.15",
-    "angular-messages": "~1.4.7"
+    "angular-messages": "~1.4.7",
+    "jquery-migrate": "^3.0.0"
   }
 }

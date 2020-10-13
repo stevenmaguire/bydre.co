@@ -7,6 +7,7 @@ exports.default = function() {
     return src([
             'bower_components/modernizr/modernizr.js',
             'bower_components/jquery/dist/jquery.min.js',
+            'bower_components/jquery-migrate/jquery-migrate.min.js',
             'bower_components/foundation/js/foundation.min.js',
             'bower_components/angular/angular.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
