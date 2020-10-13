@@ -1,6 +1,7 @@
 const { series, src, dest } = require('gulp');
 const concat = require('gulp-concat');
 const connect = require('gulp-connect');
+const sourcemaps = require('gulp-sourcemaps');
 
 exports.default = function() {
     return src([
@@ -18,6 +19,8 @@ exports.default = function() {
             '_scripts/controllers/*.js',
             '_scripts/constants/*.js',
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat('all.js'))
+        .pipe(sourcemaps.write('/'))
         .pipe(dest('js'));
 }
